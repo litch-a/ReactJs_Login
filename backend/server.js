@@ -4,14 +4,20 @@ import cors from 'cors';
 import mysql from 'mysql2';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-require('dotenv').config;
+dotenv.config();
+
+
 
 //Setting up an express application and middleware
 const app = express();
 
+
 app.use(express.json());
 app.use(cors());
+
+
 
 //Craeting MYSQL Connection
 const db = mysql.createConnection({
@@ -27,8 +33,14 @@ db.connect((err) => {
         console.error("Error connecting to the database:", err);
         return;
     }
-    console,log("Connected to database");
+    console.log("Connected to database");
 });
+
+// Add the root path handler here
+app.get('/', (req, res) => {
+    res.send('Authentication API is running');
+  });
+  
 
 //Registration endpoint
 app.post("/register", async (req, res) => {
@@ -71,5 +83,5 @@ app.post("/login", (req, res) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
